@@ -48,34 +48,35 @@ export default function Settings({
     }
   };
 
+  const inputCls = 'w-full px-3.5 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow';
+
   return (
     <div className="p-8 max-w-2xl">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8">Settings</h1>
+      <h1 className="text-3xl font-bold text-zinc-900 tracking-tight mb-8">Settings</h1>
 
-      <div className="bg-white rounded-lg shadow p-8 space-y-8">
-        {/* Profile Section */}
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <User size={20} /> Profile
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6">
+          <h2 className="text-base font-semibold text-zinc-900 mb-4 flex items-center gap-2">
+            <User size={18} className="text-indigo-500" /> Profile
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-1">Email</label>
-              <p className="text-slate-600 text-sm">{session.user.email}</p>
+              <label className="block text-sm font-medium text-zinc-700 mb-1">Email</label>
+              <p className="text-zinc-500 text-sm">{session.user.email}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-1">Display Name</label>
+              <label className="block text-sm font-medium text-zinc-700 mb-1">Display Name</label>
               {editingName ? (
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="flex-1 px-3.5 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                   />
                   <button
                     onClick={handleUpdateName}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium"
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-500 text-sm font-medium transition-all active:scale-[0.98]"
                   >
                     Save
                   </button>
@@ -84,17 +85,17 @@ export default function Settings({
                       setEditingName(false);
                       setDisplayName(profile?.display_name || '');
                     }}
-                    className="bg-slate-200 text-slate-900 px-4 py-2 rounded-lg hover:bg-slate-300 text-sm font-medium"
+                    className="bg-zinc-100 text-zinc-700 px-4 py-2 rounded-xl hover:bg-zinc-200 text-sm font-medium transition-colors"
                   >
                     Cancel
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <p className="text-slate-600 text-sm">{profile?.display_name || 'Not set'}</p>
+                  <p className="text-zinc-500 text-sm">{profile?.display_name || 'Not set'}</p>
                   <button
                     onClick={() => setEditingName(true)}
-                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                    className="text-indigo-600 hover:text-indigo-500 text-sm font-medium transition-colors"
                   >
                     Edit
                   </button>
@@ -103,83 +104,82 @@ export default function Settings({
             </div>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 text-red-600 hover:text-red-800 text-sm font-medium mt-2"
+              className="flex items-center gap-2 text-red-600 hover:text-red-500 text-sm font-medium mt-2 transition-colors"
             >
               <LogOut size={16} /> Sign out
             </button>
           </div>
         </div>
 
-        {/* Writing Samples */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-900">Writing Samples</h2>
+        <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6">
+          <div className="flex justify-between items-center mb-5">
+            <h2 className="text-base font-semibold text-zinc-900">Writing Samples</h2>
             <button
               onClick={() => setShowSampleModal(true)}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 flex items-center"
+              className="bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-500 flex items-center text-sm font-medium transition-all active:scale-[0.98]"
             >
-              <Plus size={18} className="mr-2" /> Add Sample
+              <Plus size={16} className="mr-1.5" /> Add Sample
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {writingSamples.map((sample) => (
-              <div key={sample.id} className="border border-slate-200 rounded-lg p-4">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-semibold text-slate-900">{sample.label}</h3>
+              <div key={sample.id} className="border border-zinc-200/60 rounded-xl p-4 hover:bg-zinc-50/50 transition-colors">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-medium text-sm text-zinc-900">{sample.label}</h3>
                   <button
                     onClick={() => onDeleteSample(sample.id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="p-1 text-zinc-400 hover:text-red-600 rounded-lg transition-colors"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
-                <p className="text-slate-600 text-sm line-clamp-3">{sample.content}</p>
+                <p className="text-zinc-500 text-sm line-clamp-3">{sample.content}</p>
               </div>
             ))}
             {writingSamples.length === 0 && (
-              <p className="text-slate-500 text-sm">No writing samples yet.</p>
+              <p className="text-zinc-400 text-sm py-4 text-center">No writing samples yet.</p>
             )}
           </div>
         </div>
       </div>
 
       {showSampleModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4 p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-slate-900">Add Writing Sample</h2>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50" role="dialog" aria-modal="true">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 animate-slide-up">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-xl font-bold text-zinc-900">Add Writing Sample</h2>
               <button
                 onClick={() => setShowSampleModal(false)}
-                className="text-slate-500 hover:text-slate-700"
+                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors"
               >
-                <X size={24} />
+                <X size={22} />
               </button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-900 mb-1">Label</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-1.5">Label</label>
                 <input
                   type="text"
                   value={sampleLabel}
                   onChange={(e) => setSampleLabel(e.target.value)}
                   placeholder="e.g., LinkedIn InMail - Cold outreach to analyst"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={inputCls}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-900 mb-1">Content</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-1.5">Content</label>
                 <textarea
                   value={sampleContent}
                   onChange={(e) => setSampleContent(e.target.value)}
                   rows="8"
                   placeholder="Paste your writing sample here..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2.5 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                 />
               </div>
               <button
                 onClick={handleAddSample}
-                className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium"
+                className="w-full bg-indigo-600 text-white px-4 py-2.5 rounded-xl hover:bg-indigo-500 font-medium transition-all active:scale-[0.98]"
               >
                 Save Sample
               </button>

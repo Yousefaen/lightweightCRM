@@ -31,25 +31,26 @@ export default function Auth() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-slate-100">
-      <div className="w-full max-w-md mx-4">
+    <div className="flex h-screen items-center justify-center bg-gradient-to-br from-zinc-100 via-white to-indigo-50">
+      <div className="w-full max-w-md mx-4 animate-fade-in">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Outreach CRM</h1>
-          <p className="text-slate-500">Sign in to manage your outreach pipeline</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600 text-white text-xl font-bold mb-4">O</div>
+          <h1 className="text-3xl font-bold text-zinc-900 tracking-tight mb-2">Outreach CRM</h1>
+          <p className="text-zinc-500">Sign in to manage your outreach pipeline</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-zinc-200/60 p-8">
           {sent ? (
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-4 animate-fade-in">
               <CheckCircle size={48} className="mx-auto text-green-500" />
-              <h2 className="text-xl font-semibold text-slate-900">Check your email</h2>
-              <p className="text-slate-600 text-sm">
-                We sent a magic link to <span className="font-medium">{email}</span>.
+              <h2 className="text-xl font-semibold text-zinc-900">Check your email</h2>
+              <p className="text-zinc-500 text-sm">
+                We sent a magic link to <span className="font-medium text-zinc-700">{email}</span>.
                 Click the link in the email to sign in.
               </p>
               <button
                 onClick={() => setSent(false)}
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                className="text-indigo-600 hover:text-indigo-500 text-sm font-medium transition-colors"
               >
                 Use a different email
               </button>
@@ -57,7 +58,7 @@ export default function Auth() {
           ) : (
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-slate-900 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1.5">
                   Your name
                 </label>
                 <input
@@ -65,29 +66,29 @@ export default function Auth() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="e.g. Yousef"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-900 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1.5">
                   Email address *
                 </label>
                 <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-2.5 text-slate-400" />
+                  <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full pl-10 pr-4 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                   />
                 </div>
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded p-3 text-red-800 text-sm">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-700 text-sm">
                   {error}
                 </div>
               )}
@@ -95,7 +96,7 @@ export default function Auth() {
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-500 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-[0.98]"
               >
                 {loading ? (
                   <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
@@ -106,7 +107,7 @@ export default function Auth() {
                 )}
               </button>
 
-              <p className="text-xs text-slate-400 text-center">
+              <p className="text-xs text-zinc-400 text-center">
                 No password needed. We'll email you a sign-in link.
               </p>
             </form>

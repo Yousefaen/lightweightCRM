@@ -128,16 +128,18 @@ export default function CopilotPanel({
 
   return (
     <div
-      className={`fixed right-0 top-0 h-full w-96 z-40 bg-slate-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+      className={`fixed right-0 top-0 h-full w-96 z-40 bg-zinc-50 shadow-2xl rounded-l-2xl flex flex-col transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
-      <div className="flex items-center justify-between px-5 py-4 bg-white border-b border-slate-200">
-        <div className="flex items-center gap-2">
-          <Sparkles size={20} className="text-indigo-600" />
+      <div className="flex items-center justify-between px-5 py-4 bg-white border-b border-zinc-200/60 rounded-tl-2xl">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+            <Sparkles size={16} className="text-indigo-600" />
+          </div>
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">AI Copilot</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-sm font-semibold text-zinc-900">AI Copilot</h2>
+            <p className="text-xs text-zinc-400">
               {modelUsed?.includes('opus') ? 'Opus' : modelUsed?.includes('sonnet') ? 'Sonnet (fallback)' : 'Opus'}
               {memoryCount > 0 ? ` · ${memoryCount} memories` : ''}
             </p>
@@ -147,27 +149,27 @@ export default function CopilotPanel({
           {messages.length > 0 && (
             <button
               onClick={handleClearChat}
-              className="p-1 rounded hover:bg-slate-100 text-slate-400"
+              className="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-400 transition-colors"
               title="Clear chat"
             >
-              <Trash2 size={16} />
+              <Trash2 size={15} />
             </button>
           )}
           <button
             onClick={onClose}
-            className="p-1 rounded hover:bg-slate-100 text-slate-500"
+            className="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-400 transition-colors"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
         {messages.length === 0 && (
-          <div className="text-center text-sm text-slate-400 mt-12 space-y-3">
-            <Sparkles size={32} className="mx-auto text-slate-300" />
-            <p className="font-medium">How can I help?</p>
-            <div className="space-y-1 text-xs">
+          <div className="text-center text-sm text-zinc-400 mt-12 space-y-3">
+            <Sparkles size={32} className="mx-auto text-zinc-300" />
+            <p className="font-medium text-zinc-500">How can I help?</p>
+            <div className="space-y-1.5 text-xs">
               <p>"Who should I follow up with?"</p>
               <p>"Find me 3 supply chain AI leads at Gartner"</p>
               <p>"Draft a follow-up for Sameer"</p>
@@ -188,14 +190,14 @@ export default function CopilotPanel({
 
         {loading && (
           <div className="flex justify-start mb-3">
-            <div className="bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-500">
+            <div className="bg-white border border-zinc-200/60 rounded-2xl rounded-tl-md px-4 py-3 text-sm text-zinc-500">
               <div className="flex items-center gap-2">
                 <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
-                <span>Researching...</span>
+                <span className="text-xs">Researching...</span>
               </div>
             </div>
           </div>
@@ -203,12 +205,12 @@ export default function CopilotPanel({
       </div>
 
       {error && (
-        <div className="mx-4 mb-2 bg-red-50 border border-red-200 rounded p-2 text-red-800 text-xs">
+        <div className="mx-4 mb-2 bg-red-50 border border-red-200/60 rounded-xl p-2.5 text-red-700 text-xs">
           {error}
         </div>
       )}
 
-      <div className="p-4 bg-white border-t border-slate-200">
+      <div className="p-4 bg-white border-t border-zinc-200/60 rounded-bl-2xl">
         <div className="flex gap-2">
           <textarea
             ref={inputRef}
@@ -217,14 +219,14 @@ export default function CopilotPanel({
             onKeyDown={handleKeyDown}
             placeholder="Ask about your outreach..."
             rows="2"
-            className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 px-3.5 py-2.5 border border-zinc-300 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
           />
           <button
             onClick={handleSend}
             disabled={loading || !input.trim()}
-            className="self-end p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="self-end p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
           >
-            <Send size={18} />
+            <Send size={16} />
           </button>
         </div>
       </div>

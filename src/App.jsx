@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Home, Users, PenTool, Settings as SettingsIcon, Clock, MessageSquare, Search } from 'lucide-react';
+import { Home, Users, PenTool, Settings as SettingsIcon, Clock, MessageSquare, Search, LogOut } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import {
   loadData,
@@ -25,7 +25,7 @@ import CopilotPanel from './components/CopilotPanel';
 import Prospector from './components/Prospector';
 
 export default function App() {
-  const [session, setSession] = useState(undefined); // undefined = loading
+  const [session, setSession] = useState(undefined);
   const [profile, setProfile] = useState(null);
   const [profiles, setProfiles] = useState([]);
   const [data, setData] = useState(null);
@@ -39,7 +39,6 @@ export default function App() {
 
   const { contacts = [], outreach = [], writingSamples = [] } = data || {};
 
-  // ─── Auth listener ──────────────────────────────────────
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
@@ -50,7 +49,6 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ─── Load data when session is ready ────────────────────
   useEffect(() => {
     if (!session) {
       setLoading(false);
@@ -74,13 +72,11 @@ export default function App() {
     })();
   }, [session]);
 
-  // ─── Refresh helper ─────────────────────────────────────
   const refresh = useCallback(async () => {
     const crmData = await loadData();
     setData(crmData);
   }, []);
 
-  // ─── Contact CRUD ───────────────────────────────────────
   const addContact = async (contact) => {
     const saved = await saveContact({ ...contact, createdBy: session.user.id });
     setData((d) => ({ ...d, contacts: [saved, ...d.contacts] }));
@@ -113,7 +109,6 @@ export default function App() {
     if (selectedContactId === id) setSelectedContactId(null);
   };
 
-  // ─── Outreach ───────────────────────────────────────────
   const logOutreach = async (entry) => {
     const saved = await saveOutreach({ ...entry, createdBy: session.user.id });
     setData((d) => ({ ...d, outreach: [saved, ...d.outreach] }));
@@ -139,7 +134,6 @@ export default function App() {
     }));
   };
 
-  // ─── Writing Samples ───────────────────────────────────
   const addSample = async (sample) => {
     const saved = await saveSample({ ...sample, createdBy: session.user.id });
     setData((d) => ({ ...d, writingSamples: [saved, ...d.writingSamples] }));
@@ -154,7 +148,6 @@ export default function App() {
     }));
   };
 
-  // ─── Navigation helpers ─────────────────────────────────
   const openContact = (id) => {
     setSelectedContactId(id);
     setView('contacts');
@@ -177,11 +170,10 @@ export default function App() {
 
   const selectedContact = contacts.find((c) => c.id === selectedContactId);
 
-  // ─── Auth guard ─────────────────────────────────────────
   if (session === undefined) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-100">
-        <div className="text-slate-500 text-lg">Loading...</div>
+      <div className="flex h-screen items-center justify-center bg-zinc-50">
+        <div className="text-zinc-400 text-lg font-medium">Loading...</div>
       </div>
     );
   }
@@ -192,13 +184,12 @@ export default function App() {
 
   if (loading || !data) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-100">
-        <div className="text-slate-500 text-lg">Loading...</div>
+      <div className="flex h-screen items-center justify-center bg-zinc-50">
+        <div className="text-zinc-400 text-lg font-medium">Loading...</div>
       </div>
     );
   }
 
-  // ─── Render ─────────────────────────────────────────────
   const navItems = [
     { key: 'dashboard', label: 'Dashboard', icon: <Home size={20} /> },
     { key: 'contacts', label: 'Contacts', icon: <Users size={20} /> },
@@ -209,13 +200,20 @@ export default function App() {
   ];
 
   const displayName = profile?.display_name || session.user.email?.split('@')[0] || 'there';
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
-    <div className="flex h-screen bg-slate-100">
+    <div className="flex h-screen bg-zinc-50">
       {/* Sidebar */}
-      <div className="w-64 bg-slate-900 text-white h-screen flex flex-col p-6">
-        <div className="text-2xl font-bold mb-12">Outreach CRM</div>
-        <nav className="space-y-4 flex-1">
+      <div className="w-64 bg-gradient-to-b from-zinc-900 to-zinc-950 text-white h-screen flex flex-col">
+        <div className="px-6 pt-7 pb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-sm font-bold">O</div>
+            <span className="text-lg font-semibold tracking-tight">Outreach CRM</span>
+          </div>
+        </div>
+
+        <nav className="flex-1 px-3 space-y-1">
           {navItems.map((item) => (
             <button
               key={item.key}
@@ -223,17 +221,39 @@ export default function App() {
                 setView(item.key);
                 setSelectedContactId(null);
               }}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 view === item.key
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-300 hover:bg-slate-800'
+                  ? 'bg-white/10 text-white shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              {item.icon}
+              <span className={`${view === item.key ? 'text-indigo-400' : ''}`}>{item.icon}</span>
               <span>{item.label}</span>
+              {view === item.key && (
+                <span className="ml-auto w-1 h-5 rounded-full bg-indigo-500" />
+              )}
             </button>
           ))}
         </nav>
+
+        <div className="px-4 pb-6 pt-4 border-t border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-indigo-600/80 flex items-center justify-center text-xs font-semibold">
+              {initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-zinc-200 truncate">{displayName}</p>
+              <p className="text-xs text-zinc-500 truncate">{session.user.email}</p>
+            </div>
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-white/5 transition-colors"
+              title="Sign out"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Main content */}
@@ -335,7 +355,7 @@ export default function App() {
       {/* Copilot Toggle Button */}
       <button
         onClick={() => setCopilotOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 flex items-center justify-center transition-transform hover:scale-105"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-xl ring-4 ring-indigo-600/20 hover:bg-indigo-500 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
         title="AI Copilot"
       >
         <MessageSquare size={24} />

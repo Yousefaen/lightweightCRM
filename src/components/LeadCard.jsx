@@ -40,62 +40,58 @@ export default function LeadCard({ lead, existingContacts, onAddContact, onSaveD
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-5 space-y-3">
-      {/* Header */}
+    <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-5 space-y-3 hover:shadow-md transition-shadow duration-200">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-bold text-slate-900">{lead.name}</h3>
-          <p className="text-sm text-slate-600">{lead.title} at {lead.company}</p>
+          <h3 className="text-base font-semibold text-zinc-900">{lead.name}</h3>
+          <p className="text-sm text-zinc-500">{lead.title} at {lead.company}</p>
         </div>
         <div className="flex items-center gap-2">
           {alreadyInCrm && (
-            <span className="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded-full">Already in CRM</span>
+            <span className="text-xs bg-zinc-100 text-zinc-500 px-2.5 py-1 rounded-md font-medium">Already in CRM</span>
           )}
           {!alreadyInCrm && !savedContact && (
             <button
               onClick={handleSaveContact}
-              className="flex items-center gap-1 text-sm bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700"
+              className="flex items-center gap-1.5 text-sm bg-indigo-600 text-white px-3 py-1.5 rounded-xl hover:bg-indigo-500 font-medium transition-all active:scale-[0.98]"
             >
-              <UserPlus size={16} /> Save Contact
+              <UserPlus size={14} /> Save Contact
             </button>
           )}
           {savedContact && (
-            <span className="flex items-center gap-1 text-sm text-green-700 bg-green-100 px-3 py-1.5 rounded-lg">
-              <Check size={16} /> Saved
+            <span className="flex items-center gap-1.5 text-sm text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl font-medium">
+              <Check size={14} /> Saved
             </span>
           )}
         </div>
       </div>
 
-      {/* Links */}
       <div className="flex items-center gap-4 text-sm">
         {enrichment.linkedinUrl && (
           <a
             href={enrichment.linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-500 transition-colors"
           >
-            <Linkedin size={16} /> LinkedIn <ExternalLink size={12} />
+            <Linkedin size={14} /> LinkedIn <ExternalLink size={11} />
           </a>
         )}
         {enrichment.email && (
           <button
             onClick={() => copyToClipboard(enrichment.email, 'email')}
-            className="flex items-center gap-1 text-slate-600 hover:text-slate-800"
+            className="flex items-center gap-1 text-zinc-600 hover:text-zinc-800 transition-colors"
           >
-            <Mail size={16} /> {enrichment.email}
-            {copiedField === 'email' ? <Check size={14} className="text-green-600" /> : <Copy size={14} />}
+            <Mail size={14} /> {enrichment.email}
+            {copiedField === 'email' ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
           </button>
         )}
       </div>
 
-      {/* Why relevant */}
-      <p className="text-sm text-slate-700">{lead.whyRelevant}</p>
+      <p className="text-sm text-zinc-600">{lead.whyRelevant}</p>
 
-      {/* Talking points */}
       {lead.talkingPoints?.length > 0 && (
-        <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+        <ul className="text-sm text-zinc-500 list-disc list-inside space-y-1">
           {lead.talkingPoints.map((tp, i) => (
             <li key={i}>{tp}</li>
           ))}
@@ -106,12 +102,11 @@ export default function LeadCard({ lead, existingContacts, onAddContact, onSaveD
         <p className="text-xs text-amber-600">Enrichment partial: {lead.enrichmentError}</p>
       )}
 
-      {/* Drafts section */}
       {lead.drafts && Object.keys(lead.drafts).length > 0 && (
         <div>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-800"
+            className="flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
           >
             {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             {expanded ? 'Hide' : 'Show'} Drafts ({Object.keys(lead.drafts).length})
@@ -120,27 +115,27 @@ export default function LeadCard({ lead, existingContacts, onAddContact, onSaveD
           {expanded && (
             <div className="mt-3 space-y-4">
               {Object.entries(lead.drafts).map(([channel, draft]) => (
-                <div key={channel} className="border border-slate-200 rounded-lg p-3">
+                <div key={channel} className="border border-zinc-200/60 rounded-xl p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-700">{channel}</span>
+                    <span className="text-sm font-medium text-zinc-700">{channel}</span>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => copyToClipboard(getDraftText(channel), `draft-${channel}`)}
-                        className="text-xs flex items-center gap-1 text-slate-500 hover:text-slate-700"
+                        className="text-xs flex items-center gap-1 text-zinc-400 hover:text-zinc-600 transition-colors"
                       >
-                        {copiedField === `draft-${channel}` ? <Check size={14} className="text-green-600" /> : <Copy size={14} />}
+                        {copiedField === `draft-${channel}` ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
                         Copy
                       </button>
                       {!savedDrafts?.has(channel) && (
                         <button
                           onClick={() => onSaveDraft(lead, channel, getDraftText(channel))}
-                          className="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                          className="text-xs bg-emerald-600 text-white px-2.5 py-1 rounded-lg hover:bg-emerald-500 font-medium transition-all active:scale-[0.98]"
                         >
                           Save as Outreach
                         </button>
                       )}
                       {savedDrafts?.has(channel) && (
-                        <span className="text-xs text-green-700">Saved</span>
+                        <span className="text-xs text-emerald-700 font-medium">Saved</span>
                       )}
                     </div>
                   </div>
@@ -148,7 +143,7 @@ export default function LeadCard({ lead, existingContacts, onAddContact, onSaveD
                     value={getDraftText(channel)}
                     onChange={(e) => setEditedDrafts({ ...editedDrafts, [channel]: e.target.value })}
                     rows={8}
-                    className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full text-sm px-3.5 py-2.5 border border-zinc-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                   />
                 </div>
               ))}

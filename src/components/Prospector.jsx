@@ -134,33 +134,34 @@ export default function Prospector({ session, contacts, outreach, writingSamples
   };
 
   const isRunning = state.status === 'running';
+  const inputCls = 'w-full px-3.5 py-2.5 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:opacity-50 transition-shadow';
 
   return (
     <div className="p-8 max-w-5xl">
-      <h1 className="text-3xl font-bold text-slate-900 mb-2">Prospector</h1>
-      <p className="text-slate-600 mb-6">Find leads, enrich profiles, and generate personalized outreach — all in one step.</p>
+      <h1 className="text-3xl font-bold text-zinc-900 tracking-tight mb-1">Prospector</h1>
+      <p className="text-zinc-500 mb-6">Find leads, enrich profiles, and generate personalized outreach — all in one step.</p>
 
-      <div className="bg-white rounded-lg shadow p-6 mb-6 space-y-4">
+      <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6 mb-6 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-900 mb-1">What are you looking for?</label>
+          <label className="block text-sm font-medium text-zinc-700 mb-1.5">What are you looking for?</label>
           <textarea
             value={state.query}
             onChange={(e) => dispatch({ type: 'SET_QUERY', payload: e.target.value })}
             placeholder='e.g., "5 people working on simulation AI at consulting firms"'
             rows={2}
             disabled={isRunning}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            className={inputCls}
           />
         </div>
 
         <div className="flex flex-wrap items-end gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Number of leads</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Number of leads</label>
             <select
               value={state.leadCount}
               onChange={(e) => dispatch({ type: 'SET_LEAD_COUNT', payload: Number(e.target.value) })}
               disabled={isRunning}
-              className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="px-3.5 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 transition-shadow"
             >
               <option value={3}>3</option>
               <option value={5}>5</option>
@@ -169,16 +170,16 @@ export default function Prospector({ session, contacts, outreach, writingSamples
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Channels</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Channels</label>
             <div className="flex gap-3">
               {CHANNEL_OPTIONS.map((ch) => (
-                <label key={ch} className="flex items-center gap-2 text-sm text-slate-700">
+                <label key={ch} className="flex items-center gap-2 text-sm text-zinc-600">
                   <input
                     type="checkbox"
                     checked={state.channels.includes(ch)}
                     onChange={() => dispatch({ type: 'TOGGLE_CHANNEL', payload: ch })}
                     disabled={isRunning}
-                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                    className="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
                   />
                   {ch}
                 </label>
@@ -191,16 +192,16 @@ export default function Prospector({ session, contacts, outreach, writingSamples
               <button
                 onClick={handleRun}
                 disabled={!state.query.trim() || state.channels.length === 0}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all active:scale-[0.98]"
               >
-                <Search size={18} /> Run
+                <Search size={16} /> Run
               </button>
             ) : (
               <button
                 onClick={handleCancel}
-                className="flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 font-medium"
+                className="flex items-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-500 font-medium transition-all active:scale-[0.98]"
               >
-                <X size={18} /> Cancel
+                <X size={16} /> Cancel
               </button>
             )}
           </div>
@@ -208,20 +209,20 @@ export default function Prospector({ session, contacts, outreach, writingSamples
       </div>
 
       {state.error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-6">
+        <div className="bg-red-50 border border-red-200/60 text-red-700 rounded-xl p-4 mb-6 text-sm">
           {state.error}
         </div>
       )}
 
       {state.progressLog.length > 0 && (
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
-          <div className="space-y-1">
+        <div className="bg-zinc-50 border border-zinc-200/60 rounded-xl p-4 mb-6">
+          <div className="space-y-1.5">
             {state.progressLog.map((entry, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
+              <div key={i} className="flex items-center gap-2 text-sm text-zinc-600">
                 {i === state.progressLog.length - 1 && isRunning ? (
                   <Loader2 size={14} className="animate-spin text-indigo-600" />
                 ) : (
-                  <span className="w-3.5 h-3.5 flex items-center justify-center text-green-600">&#10003;</span>
+                  <span className="w-4 h-4 flex items-center justify-center text-emerald-500 text-xs">&#10003;</span>
                 )}
                 {entry.message}
               </div>
@@ -232,7 +233,7 @@ export default function Prospector({ session, contacts, outreach, writingSamples
 
       {state.leads.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">
+          <h2 className="text-lg font-semibold text-zinc-900">
             {state.status === 'done' ? `Found ${state.leads.length} leads` : 'Results so far...'}
           </h2>
           <div className="grid gap-4">

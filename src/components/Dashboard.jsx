@@ -1,6 +1,13 @@
-import { Clock, Mail, Linkedin } from 'lucide-react';
+import { Clock, Mail, Linkedin, TrendingUp, Users, Send, MessageCircle } from 'lucide-react';
 import { getFollowUpStatus, formatDate } from '../lib/utils';
 import StatusPill from './StatusPill';
+
+const STAT_ACCENTS = [
+  { border: 'border-t-indigo-500', icon: <Users size={20} className="text-indigo-500" /> },
+  { border: 'border-t-emerald-500', icon: <Send size={20} className="text-emerald-500" /> },
+  { border: 'border-t-violet-500', icon: <MessageCircle size={20} className="text-violet-500" /> },
+  { border: 'border-t-amber-500', icon: <TrendingUp size={20} className="text-amber-500" /> },
+];
 
 export default function Dashboard({ contacts, outreach, profiles = [], displayName, onSelectContact, onNavigate }) {
   const stats = getStats(contacts, outreach);
@@ -8,49 +15,79 @@ export default function Dashboard({ contacts, outreach, profiles = [], displayNa
   const activity = getRecentActivity(contacts, outreach);
   const industryBreakdown = getBreakdown(contacts, 'industry');
   const seniorityBreakdown = getBreakdown(contacts, 'seniority');
+  const maxIndustry = industryBreakdown.length > 0 ? industryBreakdown[0].count : 1;
+  const maxSeniority = seniorityBreakdown.length > 0 ? seniorityBreakdown[0].count : 1;
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-8 space-y-8 max-w-7xl">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard</h1>
-        <p className="text-slate-600">Welcome back, {displayName}</p>
+        <h1 className="text-3xl font-bold text-zinc-900 tracking-tight mb-1">Dashboard</h1>
+        <p className="text-zinc-500">Welcome back, {displayName}</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-6">
-        <StatCard label="Total Contacts" value={stats.totalContacts} />
-        <StatCard label="Outreach This Week" value={stats.outreachThisWeek} />
-        <StatCard label="Replies Received" value={stats.replies} />
-        <StatCard label="Response Rate" value={`${stats.responseRate}%`} />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        {[
+          { label: 'Total Contacts', value: stats.totalContacts },
+          { label: 'Outreach This Week', value: stats.outreachThisWeek },
+          { label: 'Replies Received', value: stats.replies },
+          { label: 'Response Rate', value: `${stats.responseRate}%` },
+        ].map((stat, i) => (
+          <div
+            key={stat.label}
+            className={`bg-white rounded-xl border border-zinc-200/60 border-t-2 ${STAT_ACCENTS[i].border} shadow-sm p-6 hover:shadow-md transition-shadow duration-200`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-zinc-500 text-sm font-medium">{stat.label}</p>
+              {STAT_ACCENTS[i].icon}
+            </div>
+            <p className="text-3xl font-bold text-zinc-900">{stat.value}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Industry & Seniority breakdowns */}
       {(industryBreakdown.length > 0 || seniorityBreakdown.length > 0) && (
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {industryBreakdown.length > 0 && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">By Industry</h2>
-              <div className="space-y-2">
+            <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6">
+              <h2 className="text-base font-semibold text-zinc-900 mb-4">By Industry</h2>
+              <div className="space-y-3">
                 {industryBreakdown.map(({ label, count }) => (
-                  <div key={label} className="flex justify-between items-center">
-                    <span className="text-sm text-slate-700">{label}</span>
-                    <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-xs font-medium">
-                      {count}
-                    </span>
+                  <div key={label} className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-zinc-700">{label}</span>
+                      <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                        {count}
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                        style={{ width: `${(count / maxIndustry) * 100}%` }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
           {seniorityBreakdown.length > 0 && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">By Seniority</h2>
-              <div className="space-y-2">
+            <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6">
+              <h2 className="text-base font-semibold text-zinc-900 mb-4">By Seniority</h2>
+              <div className="space-y-3">
                 {seniorityBreakdown.map(({ label, count }) => (
-                  <div key={label} className="flex justify-between items-center">
-                    <span className="text-sm text-slate-700">{label}</span>
-                    <span className="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs font-medium">
-                      {count}
-                    </span>
+                  <div key={label} className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-zinc-700">{label}</span>
+                      <span className="text-xs font-semibold text-violet-700 bg-violet-50 px-2 py-0.5 rounded-md">
+                        {count}
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-violet-500 rounded-full transition-all duration-500"
+                        style={{ width: `${(count / maxSeniority) * 100}%` }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -60,19 +97,19 @@ export default function Dashboard({ contacts, outreach, profiles = [], displayNa
       )}
 
       {(reminders.overdue.length > 0 || reminders.today.length > 0) && (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-900 flex items-center">
-              <Clock className="mr-2 text-indigo-600" size={22} /> Follow-up Reminders
+            <h2 className="text-base font-semibold text-zinc-900 flex items-center gap-2">
+              <Clock className="text-indigo-500" size={20} /> Follow-up Reminders
             </h2>
             <button
               onClick={() => onNavigate('followups')}
-              className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+              className="text-indigo-600 hover:text-indigo-500 text-sm font-medium transition-colors"
             >
-              View all
+              View all &rarr;
             </button>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {reminders.overdue.map((c) => (
               <ReminderRow key={c.id} contact={c} type="overdue" onSelect={onSelectContact} />
             ))}
@@ -84,11 +121,11 @@ export default function Dashboard({ contacts, outreach, profiles = [], displayNa
       )}
 
       {activity.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-            <Mail className="mr-2 text-indigo-600" size={22} /> Recent Activity
+        <div className="bg-white rounded-xl border border-zinc-200/60 shadow-sm p-6">
+          <h2 className="text-base font-semibold text-zinc-900 mb-4 flex items-center gap-2">
+            <Mail className="text-indigo-500" size={20} /> Recent Activity
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {activity.map((item) => (
               <ActivityRow key={item.id} item={item} />
             ))}
@@ -99,31 +136,22 @@ export default function Dashboard({ contacts, outreach, profiles = [], displayNa
   );
 }
 
-function StatCard({ label, value }) {
-  return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <p className="text-slate-600 text-sm font-medium">{label}</p>
-      <p className="text-4xl font-bold text-slate-900 mt-2">{value}</p>
-    </div>
-  );
-}
-
 function ReminderRow({ contact, type, onSelect }) {
   const styles = {
-    overdue: 'bg-red-50 border-red-200 text-red-900',
-    today: 'bg-amber-50 border-amber-200 text-amber-900',
+    overdue: 'bg-red-50 border-l-red-500 text-red-900',
+    today: 'bg-amber-50 border-l-amber-500 text-amber-900',
   };
   const cls = styles[type] || styles.today;
 
   return (
-    <div className={`border rounded p-4 flex justify-between items-center ${cls}`}>
+    <div className={`border-l-4 rounded-xl px-4 py-3 flex justify-between items-center ${cls}`}>
       <div>
-        <p className="font-semibold">{contact.name}</p>
-        <p className="text-sm text-slate-600">{contact.company}</p>
+        <p className="font-semibold text-sm">{contact.name}</p>
+        <p className="text-xs text-zinc-500">{contact.company}</p>
       </div>
       <button
         onClick={() => onSelect(contact.id)}
-        className="text-indigo-600 hover:text-indigo-800 font-medium text-sm"
+        className="text-indigo-600 hover:text-indigo-500 font-medium text-sm transition-colors"
       >
         View
       </button>
@@ -131,26 +159,34 @@ function ReminderRow({ contact, type, onSelect }) {
   );
 }
 
+const CHANNEL_BORDER = {
+  Email: 'border-l-emerald-400',
+  'LinkedIn InMail': 'border-l-blue-400',
+  'LinkedIn Message': 'border-l-sky-400',
+};
+
 function ActivityRow({ item }) {
   const icon =
     item.channel === 'Email' ? (
-      <Mail size={16} />
+      <Mail size={16} className="text-emerald-500" />
     ) : (
-      <Linkedin size={16} />
+      <Linkedin size={16} className="text-blue-500" />
     );
 
+  const borderCls = CHANNEL_BORDER[item.channel] || 'border-l-zinc-300';
+
   return (
-    <div className="border border-slate-200 rounded p-3 text-sm">
-      <div className="flex justify-between items-start mb-2">
-        <div>
-          <p className="font-semibold text-slate-900">{item.contactName}</p>
-          <p className="text-slate-600 flex items-center mt-1">
-            {icon} <span className="ml-2">{item.channel}</span>
-          </p>
+    <div className={`border border-zinc-100 border-l-4 ${borderCls} rounded-xl px-4 py-3 text-sm hover:bg-zinc-50/50 transition-colors`}>
+      <div className="flex justify-between items-start">
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5">{icon}</div>
+          <div>
+            <p className="font-semibold text-zinc-900">{item.contactName}</p>
+            <p className="text-xs text-zinc-500 mt-0.5">{item.channel} &middot; {formatDate(item.date)}</p>
+          </div>
         </div>
         <StatusPill status={item.status} />
       </div>
-      <p className="text-slate-600">{formatDate(item.date)}</p>
     </div>
   );
 }

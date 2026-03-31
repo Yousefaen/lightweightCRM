@@ -33,35 +33,37 @@ export default function OutreachLog({ contact, onSave, onClose }) {
   const showFollowUpSuggestion =
     form.status === 'sent' || form.status === 'follow-up-needed';
 
+  const inputCls = 'w-full px-3.5 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow';
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-slate-900">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50" role="dialog" aria-modal="true">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 animate-slide-up">
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-bold text-zinc-900">
             Log Outreach — {contact.name}
           </h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-700">
-            <X size={24} />
+          <button onClick={onClose} className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors">
+            <X size={22} />
           </button>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Date</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Date</label>
             <input
               type="date"
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={inputCls}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Channel</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Channel</label>
             <select
               value={form.channel}
               onChange={(e) => setForm({ ...form, channel: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={inputCls}
             >
               <option>LinkedIn InMail</option>
               <option>LinkedIn Message</option>
@@ -71,34 +73,34 @@ export default function OutreachLog({ contact, onSave, onClose }) {
 
           {showSubject && (
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-1">Subject</label>
+              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Subject</label>
               <input
                 type="text"
                 value={form.subject}
                 onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={inputCls}
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">
               Message Content
             </label>
             <textarea
               value={form.messageContent}
               onChange={(e) => setForm({ ...form, messageContent: e.target.value })}
               rows="5"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3.5 py-2.5 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Status</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Status</label>
             <select
               value={form.status}
               onChange={(e) => setForm({ ...form, status: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={inputCls}
             >
               <option value="sent">Sent</option>
               <option value="replied">Replied</option>
@@ -108,7 +110,7 @@ export default function OutreachLog({ contact, onSave, onClose }) {
           </div>
 
           {showFollowUpSuggestion && (
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
+            <div className="bg-indigo-50 border border-indigo-200/60 rounded-xl p-3">
               <label className="flex items-center text-sm text-indigo-900">
                 <input
                   type="checkbox"
@@ -123,7 +125,7 @@ export default function OutreachLog({ contact, onSave, onClose }) {
                   type="date"
                   value={followUpDate}
                   onChange={(e) => setFollowUpDate(e.target.value)}
-                  className="mt-2 w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-2 w-full px-3.5 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                 />
               )}
             </div>
@@ -131,7 +133,7 @@ export default function OutreachLog({ contact, onSave, onClose }) {
 
           <button
             onClick={handleSubmit}
-            className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium"
+            className="w-full bg-indigo-600 text-white px-4 py-2.5 rounded-xl hover:bg-indigo-500 font-medium transition-all active:scale-[0.98]"
           >
             Log Outreach
           </button>

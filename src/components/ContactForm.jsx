@@ -55,9 +55,11 @@ export default function ContactForm({ contact, onSave, onClose }) {
     }
   };
 
+  const inputCls = 'w-full px-3.5 py-2.5 h-10 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow';
+
   const field = (label, key, type = 'text', required = false) => (
     <div>
-      <label className="block text-sm font-medium text-slate-900 mb-1">
+      <label className="block text-sm font-medium text-zinc-700 mb-1.5">
         {label}
         {required && ' *'}
       </label>
@@ -65,18 +67,18 @@ export default function ContactForm({ contact, onSave, onClose }) {
         type={type}
         value={form[key]}
         onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className={inputCls}
       />
     </div>
   );
 
   const dropdown = (label, key, options) => (
     <div>
-      <label className="block text-sm font-medium text-slate-900 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-zinc-700 mb-1.5">{label}</label>
       <select
         value={form[key]}
         onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className={inputCls}
       >
         {options.map((opt) => (
           <option key={opt} value={opt}>
@@ -88,14 +90,14 @@ export default function ContactForm({ contact, onSave, onClose }) {
   );
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-slate-900">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50" role="dialog" aria-modal="true">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 max-h-[90vh] overflow-y-auto animate-slide-up">
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-bold text-zinc-900">
             {isEdit ? 'Edit Contact' : 'Add Contact'}
           </h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-700">
-            <X size={24} />
+          <button onClick={onClose} className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors">
+            <X size={22} />
           </button>
         </div>
 
@@ -114,37 +116,37 @@ export default function ContactForm({ contact, onSave, onClose }) {
           {field('Tags (comma-separated)', 'tags')}
 
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Notes</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Notes</label>
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
               rows="3"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3.5 py-2.5 border border-zinc-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-1">Status</label>
+            <label className="block text-sm font-medium text-zinc-700 mb-1.5">Status</label>
             <select
               value={form.status}
               onChange={(e) => setForm({ ...form, status: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={inputCls}
             >
               <option value="active">Active</option>
               <option value="archived">Archived</option>
             </select>
           </div>
 
-          <div className="flex space-x-3 pt-4">
+          <div className="flex gap-3 pt-4">
             <button
               onClick={handleSave}
-              className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium"
+              className="flex-1 bg-indigo-600 text-white px-4 py-2.5 rounded-xl hover:bg-indigo-500 font-medium transition-all active:scale-[0.98]"
             >
               {isEdit ? 'Update Contact' : 'Add Contact'}
             </button>
             <button
               onClick={onClose}
-              className="flex-1 bg-slate-200 text-slate-900 px-4 py-2 rounded-lg hover:bg-slate-300 font-medium"
+              className="flex-1 bg-zinc-100 text-zinc-700 px-4 py-2.5 rounded-xl hover:bg-zinc-200 font-medium transition-colors"
             >
               Cancel
             </button>
