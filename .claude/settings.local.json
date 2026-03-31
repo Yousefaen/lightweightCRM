@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(jsx|js|json\\)$\")",
+      "Bash(npx vite:*)"
+    ]
+  }
+}
