@@ -16,6 +16,7 @@ export default function Drafter({
   const [angle, setAngle] = useState('');
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState('Generating...');
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
@@ -38,6 +39,7 @@ export default function Drafter({
     }
     setError('');
     setLoading(true);
+    setLoadingStatus('Generating...');
     try {
       const text = await generateDraft({
         samples: writingSamples,
@@ -45,10 +47,14 @@ export default function Drafter({
         channel,
         angle,
         priorOutreach: contactOutreach,
+        onStatus: (msg) => setLoadingStatus(msg),
       });
       setOutput(text);
     } catch (e) {
-      setError(e.message);
+      const isRateLimit = e.status === 429 || /rate limit/i.test(e.message);
+      setError(isRateLimit
+        ? 'Rate limit reached. Please wait a moment and try again.'
+        : e.message);
     } finally {
       setLoading(false);
     }
@@ -169,7 +175,7 @@ export default function Drafter({
           {loading ? (
             <>
               <div className="animate-spin mr-2 h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
-              Generating...
+              {loadingStatus}
             </>
           ) : (
             <>
