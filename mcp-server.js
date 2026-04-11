@@ -199,7 +199,7 @@ server.tool(
   'List outreach entries. Optionally filter by contact name or outreach status.',
   {
     contact_name: z.string().optional().describe('Filter by contact name (partial match)'),
-    status: z.enum(['sent', 'replied', 'follow-up-needed', 'no-response']).optional().describe('Filter by status'),
+    status: z.enum(['sent', 'replied', 'follow-up-needed', 'no-response', 'draft']).optional().describe('Filter by status'),
   },
   async ({ contact_name, status }) => {
     const data = readData();
@@ -241,7 +241,7 @@ server.tool(
     channel: z.enum(['LinkedIn InMail', 'LinkedIn Message', 'Email']).describe('Outreach channel'),
     subject: z.string().optional().describe('Subject line (for InMail/Email)'),
     messageContent: z.string().describe('Message content'),
-    status: z.enum(['sent', 'replied', 'follow-up-needed', 'no-response']).optional().describe('Status (default: sent)'),
+    status: z.enum(['sent', 'replied', 'follow-up-needed', 'no-response', 'draft']).optional().describe('Status (default: sent)'),
   },
   async (params) => {
     const data = readData();
@@ -286,7 +286,7 @@ server.tool(
   'Change the status of an outreach entry.',
   {
     outreach_id: z.string().describe('Outreach entry ID'),
-    status: z.enum(['sent', 'replied', 'follow-up-needed', 'no-response']).describe('New status'),
+    status: z.enum(['sent', 'replied', 'follow-up-needed', 'no-response', 'draft']).describe('New status'),
   },
   async ({ outreach_id, status }) => {
     const data = readData();

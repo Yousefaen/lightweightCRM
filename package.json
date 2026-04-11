@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "daily-outbound": "node scripts/daily-outbound.js",
+    "daily-outbound:dry": "node scripts/daily-outbound.js --dry-run"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",

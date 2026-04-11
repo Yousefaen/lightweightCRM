@@ -1,0 +1,31 @@
+{
+  "modelId": "claude-sonnet-4-20250514",
+  "maxTokens": 800,
+  "targetPersonas": [
+    "chief of staff",
+    "head of operations",
+    "vp operations",
+    "head of revops",
+    "head of revenue operations",
+    "founder",
+    "ceo",
+    "cofounder",
+    "head of gtm",
+    "head of growth",
+    "vp growth",
+    "head of people"
+  ],
+  "guardrails": {
+    "maxLeadsPerRun": 10,
+    "maxDomainsPerRun": 2,
+    "minEmailConfidence": 50,
+    "excludedDomains": [
+      "rhythms.com",
+      "listenlabs.ai",
+      "ventureguides.com",
+      "aaru.com",
+      "sap.com",
+      "hbs.edu"
+    ]
+  }
+}
