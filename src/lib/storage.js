@@ -149,6 +149,82 @@ export async function updateProfile(userId, updates) {
   return data;
 }
 
+// ─── Automation Domains ───────────────────────────────────
+
+export async function loadAutomationDomains() {
+  const { data, error } = await supabase
+    .from('automation_domains')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data || []).map((row) => ({
+    domain: row.domain,
+    label: row.label,
+    lane: row.lane,
+    lastCheckedAt: row.last_checked_at,
+    createdAt: row.created_at,
+  }));
+}
+
+export async function addAutomationDomain({ domain, label, lane }) {
+  const { data, error } = await supabase
+    .from('automation_domains')
+    .insert({ domain, label, lane })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteAutomationDomain(domain) {
+  const { error } = await supabase
+    .from('automation_domains')
+    .delete()
+    .eq('domain', domain);
+  if (error) throw error;
+}
+
+// ─── Automation Runs ──────────────────────────────────────
+
+export async function loadAutomationRuns(limit = 20) {
+  const { data, error } = await supabase
+    .from('automation_runs')
+    .select('*')
+    .order('started_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data || []).map((row) => ({
+    id: row.id,
+    startedAt: row.started_at,
+    finishedAt: row.finished_at,
+    triggeredBy: row.triggered_by,
+    domainsProcessed: row.domains_processed,
+    stats: row.stats,
+    errors: row.errors,
+  }));
+}
+
+// ─── Automation Config ────────────────────────────────────
+
+export async function loadAutomationConfig() {
+  const { data, error } = await supabase
+    .from('automation_config')
+    .select('key, value');
+  if (error) throw error;
+  const config = {};
+  for (const row of data || []) {
+    config[row.key] = row.value;
+  }
+  return config;
+}
+
+export async function updateAutomationConfig(key, value) {
+  const { error } = await supabase
+    .from('automation_config')
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+  if (error) throw error;
+}
+
 // ─── Copilot memory (kept in localStorage — per-device) ────
 
 const COPILOT_MEMORY_KEY = 'outreach-crm-copilot-memory';

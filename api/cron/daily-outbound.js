@@ -44,10 +44,24 @@ const HUNTER_URL = 'https://api.hunter.io/v2/domain-search';
 
 // ---------- helpers ----------
 
-function loadConfig() {
-  // config/automation.json is in the repo root's /config dir.
-  // In Vercel's serverless bundle, __dirname points into .vercel/output;
-  // we resolve relative to this module's URL to stay portable.
+async function loadConfig(supabase) {
+  // Try loading config from Supabase automation_config table first
+  try {
+    const { data, error } = await supabase
+      .from('automation_config')
+      .select('key, value');
+    if (!error && data && data.length > 0) {
+      const config = {};
+      for (const row of data) {
+        config[row.key] = row.value;
+      }
+      return config;
+    }
+  } catch {
+    // fall through to filesystem
+  }
+
+  // Fallback to static config file
   const here = path.dirname(fileURLToPath(import.meta.url));
   const configPath = path.resolve(here, '../../config/automation.json');
   return JSON.parse(readFileSync(configPath, 'utf-8'));
@@ -281,8 +295,8 @@ export default async function handler(req, res) {
   let supabase;
 
   try {
-    const config = loadConfig();
     supabase = createServiceClient();
+    const config = await loadConfig(supabase);
 
     // --- load state ---
     const [domains, existingEmails, samples] = await Promise.all([

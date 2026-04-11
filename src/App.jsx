@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Home, Users, PenTool, Settings as SettingsIcon, Clock, MessageSquare, Search, LogOut } from 'lucide-react';
+import { Home, Users, PenTool, Settings as SettingsIcon, Clock, MessageSquare, Search, LogOut, Zap } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import {
   loadData,
@@ -23,6 +23,7 @@ import SettingsView from './components/Settings';
 import FollowUpList from './components/FollowUpList';
 import CopilotPanel from './components/CopilotPanel';
 import Prospector from './components/Prospector';
+import Automation from './components/Automation';
 
 export default function App() {
   const [session, setSession] = useState(undefined);
@@ -195,6 +196,7 @@ export default function App() {
     { key: 'contacts', label: 'Contacts', icon: <Users size={20} /> },
     { key: 'followups', label: 'Follow-ups', icon: <Clock size={20} /> },
     { key: 'prospector', label: 'Prospect', icon: <Search size={20} /> },
+    { key: 'automation', label: 'Automation', icon: <Zap size={20} /> },
     { key: 'drafter', label: 'Draft', icon: <PenTool size={20} /> },
     { key: 'settings', label: 'Settings', icon: <SettingsIcon size={20} /> },
   ];
@@ -311,6 +313,13 @@ export default function App() {
             writingSamples={writingSamples}
             onAddContact={addContactSilent}
             onLogOutreach={logOutreach}
+          />
+        )}
+
+        {view === 'automation' && (
+          <Automation
+            session={session}
+            onRefreshData={refresh}
           />
         )}
 
